@@ -1,0 +1,19 @@
+{
+  "name": "codeial",
+  "version": "1.0.0",
+  "description": "Codeial, a social media application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Social",
+    "media",
+    "applciation"
+  ],
+  "author": "Subramanian Palanivel",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
