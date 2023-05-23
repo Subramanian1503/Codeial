@@ -12,8 +12,14 @@ router.get("/", homeController.home);
 // Requiring the user routers
 const userRouter = require("./users");
 
-// Setup a middle ware URLS for users routers
+// Setup a middle ware URLS for posts routers
 router.use("/users", userRouter);
+
+// Requiring the posts routers
+const postsRouter = require("./posts");
+
+// Setup a middle ware URLS for users routers
+router.use("/posts", postsRouter);
 
 // Exporting the router from express
 module.exports = router;
