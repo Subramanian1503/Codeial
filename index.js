@@ -10,6 +10,10 @@ const app = express();
 // Initialise the custom router class
 app.use("/", require("./routes"));
 
+// Setup view engine and views folder
+app.set("view engine", "ejs");
+app.set("views", "./views");
+
 // Express applicaiton listening the port
 app.listen(port, function (error) {
   if (error) {
