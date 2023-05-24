@@ -1,6 +1,6 @@
 // Requiring express to define router
 const express = require("express");
-const homeController = require("../controllers/HomeController");
+const homeController = require("../controllers/home_controller");
 
 // Getting the router from express
 const router = express.Router();

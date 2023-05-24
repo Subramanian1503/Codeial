@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 // Requiring the post controller to call the controller from router
-const postController = require('../controllers/PostsController');
+const postController = require('../controllers/post_controller');
 
 // Map the required post urls with the routers
 router.get("/create", postController.createPost);

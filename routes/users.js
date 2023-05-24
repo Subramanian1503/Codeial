@@ -2,7 +2,7 @@
 const express = require("express");
 
 // Requiring the user controller to map with router URLS
-const userController = require("../controllers/UserController");
+const userController = require("../controllers/user_controller");
 
 // Initialise a variable with router object
 const router = express.Router();
