@@ -6,7 +6,7 @@ const userController = require("../controllers/user_controller");
 
 // Initialise a variable with router object
 const router = express.Router();
-console.log('User router created successfully');
+console.log("User router created successfully");
 
 // Map the URLS with the controllers
 router.get("/profile", userController.user);
