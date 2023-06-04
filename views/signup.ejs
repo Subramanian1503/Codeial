@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SignUp!</title>
+    <!-- add styling to the webpage -->
+    <link rel="stylesheet" type="text/css" href="/css/signup.css" />
+  </head>
+  <body>
+    <!-- sign up form container -->
+    <form id="signUpFormContainer">
+      <!-- form header -->
+      <header id="formHeader">
+        <h1>Welcome to Codeial</h1>
+        <p>Create an account, its free</p>
+      </header>
+      <div id="inputTextArea">
+        <!-- name input  -->
+        <div class="inputText">
+          <label for="nameTextField">Name</label>
+          <input
+            id="nameTextField"
+            type="text"
+            placeholder="Enter your name..."
+            required
+          />
+        </div>
+        <!-- user name input -->
+        <div class="inputText">
+          <label for="userNameTextField">UserName</label>
+          <input
+            id="userNameTextField"
+            type="text"
+            placeholder="Enter your user name..."
+            required
+          />
+        </div>
+        <!-- password input -->
+        <div class="inputText">
+          <label for="passwordTextField">Password</label>
+          <input
+            id="passwordTextField"
+            type="password"
+            placeholder="Enter your password..."
+            required
+          />
+        </div>
+      </div>
+      <!-- form footer with sign up button -->
+      <footer id="formFooter">
+        <div class="inputTextForTerms">
+          <input type="checkbox" id="TermsAndConditions" />
+          <span><label for="TermsAndConditions">I agree with terms and conditions</label></span>
+        </div>
+        <button type="submit">Sign up!</button>
+      </footer>
+    </form>
+  </body>
+</html>

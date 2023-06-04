@@ -10,7 +10,9 @@ console.log('User router created successfully');
 
 // Map the URLS with the controllers
 router.get("/profile", userController.user);
-router.get("/create", userController.createUser)
+router.get("/create", userController.createUser);
+router.get("/signIn", userController.signIn);
+router.get("/signUp", userController.signUp);
 
 // Export the router to be used as a middle ware in main router class
 module.exports = router;

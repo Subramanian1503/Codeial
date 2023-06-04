@@ -13,3 +13,22 @@ module.exports.createUser = function (request, response) {
     pageHeading: "Creating user",
   });
 };
+
+// Defining a action to render sign up page
+module.exports.signUp = function(request, response){
+  return response.render('user_sign_up', {
+    title: 'SignUp'
+  })
+}
+
+// Defining a action to render sign in page
+module.exports.signIn = function(request, response){
+  return response.render('user_sign_in', {
+    title: 'SignIn'
+  })
+}
+
+// Defining a action for creating a session for user
+module.exports.createSession = function(request, response){
+  // TODO create a user session and sign in the user using cookies
+}
