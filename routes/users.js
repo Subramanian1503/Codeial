@@ -10,7 +10,7 @@ console.log("User router created successfully");
 
 // Map the URLS with the controllers
 router.get("/profile", userController.user);
-router.get("/create", userController.createUser);
+router.post("/create", userController.createUser);
 router.get("/signIn", userController.signIn);
 router.get("/signUp", userController.signUp);
 
