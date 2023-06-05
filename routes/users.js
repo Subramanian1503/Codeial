@@ -11,6 +11,7 @@ console.log("User router created successfully");
 // Map the URLS with the controllers
 router.get("/profile", userController.user);
 router.post("/create", userController.createUser);
+router.post("/create-session", userController.createSession);
 router.get("/signIn", userController.signIn);
 router.get("/signUp", userController.signUp);
 
