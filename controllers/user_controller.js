@@ -12,6 +12,9 @@ module.exports.user = function (request, response) {
 
 // Defining a action to render sign up page
 module.exports.signUp = function (request, response) {
+  if (request.isAuthenticated()) {
+    return response.redirect("/users/profile");
+  }
   return response.render("user_sign_up", {
     title: "SignUp",
   });
@@ -19,6 +22,9 @@ module.exports.signUp = function (request, response) {
 
 // Defining a action to render sign in page
 module.exports.signIn = function (request, response) {
+  if (request.isAuthenticated()) {
+    return response.redirect("/users/profile");
+  }
   return response.render("user_sign_in", {
     title: "SignIn",
   });
@@ -27,16 +33,24 @@ module.exports.signIn = function (request, response) {
 // Defining a action for creating a session for user
 module.exports.createSession = function (request, response) {
   // TODO create a user session and sign in the user using cookies
+  return response.redirect("/");
+};
+
+// Logging out from the session
+module.exports.destroySession = (request, response) => {
+  request.logout((error) => {
+    console.log(`Error while trying to logging out from session`);
+  });
+  return response.redirect("/");
 };
 
 // Defining a function for the controller which can be called using the name user
 module.exports.createUser = function (request, response) {
   // TODO: create the user using the inputs from query param and path variable
-  
+
   // Validate the user inputs
   const validationResponse = validateCreateUserRequest(request);
   if (validationResponse == "REQUEST_VALID") {
-    
     // If request is valid then create a user
     User.create(request.body)
       .then((user) => {
