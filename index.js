@@ -19,6 +19,9 @@ const passportLocal = require('./configs/passport');
 // Requiring connect-mongo to store the encrypted session cookie content into DB so that users will not log out whenever server restart happends
 const MongoStore = require('connect-mongo')
 
+// Requiring the SASS node module to use SASS CSS format to make life easy
+const sassMiddleWare = require('node-sass-middleware');
+
 // Declaring a port on which the server need to listen
 const port = 8080;
 
@@ -74,6 +77,15 @@ app.use(passport.setAuthenticatedUser);
 
 // Initialise the custom router class
 app.use("/", require("./routes"));
+
+// Using SASS as middleware
+app.use(sassMiddleWare({
+  src: './assets/sass',
+  dest: './assets/css',
+  debug: true,
+  outputStyle: "expanded",
+  prefix: '/css'
+}))
 
 // Express applicaiton listening the port
 app.listen(port, function (error) {

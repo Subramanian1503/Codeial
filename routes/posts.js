@@ -8,7 +8,7 @@ const router = express.Router();
 const postController = require('../controllers/post_controller');
 
 // Map the required post urls with the routers
-router.get("/create", postController.createPost);
+router.post("/create", postController.createPost);
 
 // Export the post router to use it as a middleware in main router
 module.exports = router;

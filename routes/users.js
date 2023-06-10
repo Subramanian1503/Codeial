@@ -21,9 +21,9 @@ router.post(
   }),
   userController.createSession
 );
-router.get("/signIn", userController.signIn);
-router.get("/signUp", userController.signUp);
-router.get("/signOut", userController.destroySession);
+router.get("/sign-in", userController.signIn);
+router.get("/sign-up", userController.signUp);
+router.get("/sign-out", userController.destroySession);
 
 // Export the router to be used as a middle ware in main router class
 module.exports = router;

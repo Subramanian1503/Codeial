@@ -55,7 +55,7 @@ module.exports.createUser = function (request, response) {
     User.create(request.body)
       .then((user) => {
         console.log("User created successfully");
-        return response.redirect("/users/signIn");
+        return response.redirect("/users/sign-in");
       })
       .catch((error) => {
         console.log(
