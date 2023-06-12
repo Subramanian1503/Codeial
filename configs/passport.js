@@ -55,7 +55,7 @@ passport.checkAuthentication = function (request, response, next) {
   if (request.isAuthenticated()) {
     return next();
   }
-  return response.redirect("/users/signIn");
+  return response.redirect("/users/sign-in");
 };
 
 // Provide implementation to set the user information in the resonse from the request set by passport

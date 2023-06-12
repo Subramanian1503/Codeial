@@ -9,13 +9,15 @@ module.exports.createPost = function (request, response) {
   const postContent = request.body.content;
 
   // Populate it will user inforamtion
-  const userId = request.userId;
+  console.log(request.user);
+  const userId = request.user;
 
   // Building the post model
   const post = {
     content: postContent,
     user: userId
   };
+  console.log(post);
 
   // Save the request in the mongo DB
   Post.create(post).then((post) => {
