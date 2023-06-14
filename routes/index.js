@@ -21,5 +21,11 @@ const postsRouter = require("./posts");
 // Setup a middle ware URLS for users routers
 router.use("/posts", postsRouter);
 
+// Requiring the comments routers
+const commentsRouter = require("./comments");
+
+// Setup a middle ware URLS for users routers
+router.use("/comment", commentsRouter);
+
 // Exporting the router from express
 module.exports = router;
