@@ -1,25 +1,35 @@
+// Requiring the user model to do CRUD operation
+const User = require("../models/user");
+
 const Post = require("../models/post");
 
 // Define a function called home which will be used in main router
-module.exports.home = function (request, response) {
-  // Getting all the posts
-  Post.find({})
-    .populate("user")
-    .populate({
-      path: "comments",
-      populate: {
-        path: "user",
-      },
-    })
-    .then((posts) => {
-      console.log(posts);
-      return response.render("home", {
-        title: "Home Page",
-        pageHeading: "Home page",
-        posts: posts,
+module.exports.home = async function (request, response) {
+  try {
+    //Getting all the posts from DB
+    const posts = await Post.find({})
+      .populate("user")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user",
+        },
       });
-    })
-    .catch((error) => {
-      return response.redirect("back");
+
+    // Getting all the users from DB
+    const users = await User.find({});
+
+    // Redirecting the home page view with collected data
+    return response.render("home", {
+      title: "Home Page",
+      pageHeading: "Home page",
+      posts: posts,
+      all_users: users,
     });
+  } catch (error) {
+    console.log(
+      `Error while trying to fetching home page data from DB : ${error}`
+    );
+    return response.redirect("back");
+  }
 };

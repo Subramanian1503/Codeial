@@ -12,7 +12,7 @@ const router = express.Router();
 console.log("User router created successfully");
 
 // Map the URLS with the controllers
-router.get("/profile", passport.checkAuthentication, userController.user);
+router.get("/profile/:id", passport.checkAuthentication, userController.userProfile);
 router.post("/create", userController.createUser);
 router.post(
   "/create-session",
@@ -24,6 +24,7 @@ router.post(
 router.get("/sign-in", userController.signIn);
 router.get("/sign-up", userController.signUp);
 router.get("/sign-out", userController.destroySession);
+router.get("/update/:id", userController.update);
 
 // Export the router to be used as a middle ware in main router class
 module.exports = router;

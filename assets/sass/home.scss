@@ -1,0 +1,15 @@
+#home-container{
+    display: flex;
+
+    #feed-posts{
+        width: 70%;
+        height: 100%;
+        padding: 10px;
+    }
+
+    #user-list-container{
+        width: 30%;
+        height: 100vh;
+        border: 1px solid gray;
+    }
+}

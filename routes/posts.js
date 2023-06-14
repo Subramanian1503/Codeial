@@ -12,6 +12,7 @@ const postController = require('../controllers/post_controller');
 
 // Map the required post urls with the routers
 router.post("/create", passport.checkAuthentication, postController.createPost);
+router.get("/delete/:id", passport.checkAuthentication, postController.deletePost);
 
 // Export the post router to use it as a middleware in main router
 module.exports = router;

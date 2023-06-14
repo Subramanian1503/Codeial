@@ -2,12 +2,40 @@
 const { error } = require("console");
 const User = require("../models/user");
 
+// Defining a function to update user inforamtion
+module.exports.update = async function (request, response) {
+  try {
+    // Getting the userId
+    const userId = request.params.id;
+
+    // Finding the user and updating the user with request body
+    const updatedUser = await User.findByIdAndUpdate(userId, request.body);
+    console.log(`Updated user`);
+  } catch (error) {
+    console.log(`Error while trying to update user : ${error}`);
+  }
+
+  return response.redirect("back");
+};
+
 // Defining a function for the controller which can be called using the name user
-module.exports.user = function (request, response) {
-  return response.render("user_profile", {
-    title: "User profile",
-    pageHeading: "Viewing user profile page",
-  });
+module.exports.userProfile = async function (request, response) {
+  try {
+    // Getting the requested user id to go for profile
+    const userId = request.params.id;
+
+    // Finding the user with the id
+    const requestedUser = await User.findById(userId);
+
+    // Redircting the view page with collected data
+    return response.render("user_profile", {
+      title: "User profile",
+      pageHeading: "Viewing user profile page",
+      requested_user: requestedUser,
+    });
+  } catch (error) {
+    console.log(`Error while trying to fetch user from DB : ${error}`);
+  }
 };
 
 // Defining a action to render sign up page
@@ -45,24 +73,26 @@ module.exports.destroySession = (request, response) => {
 };
 
 // Defining a function for the controller which can be called using the name user
-module.exports.createUser = function (request, response) {
+module.exports.createUser = async function (request, response) {
   // TODO: create the user using the inputs from query param and path variable
 
   // Validate the user inputs
   const validationResponse = validateCreateUserRequest(request);
+
   if (validationResponse == "REQUEST_VALID") {
-    // If request is valid then create a user
-    User.create(request.body)
-      .then((user) => {
-        console.log("User created successfully");
-        return response.redirect("/users/sign-in");
-      })
-      .catch((error) => {
-        console.log(
-          `Error occured while trying to create user please try again: ${error}`
-        );
-        return response.redirect("back");
-      });
+    try {
+      // If request is valid then create a user
+      const createdUser = await User.create(request.body);
+      console.log("User created successfully");
+
+      // redirecting with the view page and collected data from DB
+      return response.redirect("/users/sign-in");
+    } catch (error) {
+      console.log(
+        `Error occured while trying to create user please try again: ${error}`
+      );
+      return response.redirect("back");
+    }
   } else {
     console.log(
       `Error occured while trying to signUp user with error message: ${validationResponse}`
