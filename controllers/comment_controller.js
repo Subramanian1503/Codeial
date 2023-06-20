@@ -40,7 +40,7 @@ module.exports.deleteComment = async function (request, response) {
       return response.redirect("back");
     }
   } catch (error) {
-    console.log(`error while trying to find the comment`);
+    request.flash('error', error);
     return response.redirect("back");
   }
 };
@@ -69,10 +69,10 @@ module.exports.create = (request, response) => {
           response.redirect("/");
         })
         .catch((error) => {
-          console.log("Error while trying to create comment");
+          request.flash('error', error);
         });
     })
     .catch((error) => {
-      console.log(`Error while trying to find post : ${error}`);
+      request.flash('error', error);
     });
 };

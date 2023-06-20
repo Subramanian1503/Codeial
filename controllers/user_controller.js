@@ -12,7 +12,7 @@ module.exports.update = async function (request, response) {
     const updatedUser = await User.findByIdAndUpdate(userId, request.body);
     console.log(`Updated user`);
   } catch (error) {
-    console.log(`Error while trying to update user : ${error}`);
+    request.flash('error', error);
   }
 
   return response.redirect("back");
@@ -34,7 +34,7 @@ module.exports.userProfile = async function (request, response) {
       requested_user: requestedUser,
     });
   } catch (error) {
-    console.log(`Error while trying to fetch user from DB : ${error}`);
+    request.flash('error', error);
   }
 };
 
@@ -60,6 +60,9 @@ module.exports.signIn = function (request, response) {
 
 // Defining a action for creating a session for user
 module.exports.createSession = function (request, response) {
+  // Adding the success message to the request to show as a flash message
+  request.flash("success", "User logged in successfully");
+
   // TODO create a user session and sign in the user using cookies
   return response.redirect("/");
 };
@@ -67,8 +70,11 @@ module.exports.createSession = function (request, response) {
 // Logging out from the session
 module.exports.destroySession = (request, response) => {
   request.logout((error) => {
-    console.log(`Error while trying to logging out from session`);
+    request.flash('error', error);
   });
+
+  // Adding the success message to the request to show as a flash message
+  request.flash("success", "User logged out successfully");
   return response.redirect("/");
 };
 
@@ -88,9 +94,7 @@ module.exports.createUser = async function (request, response) {
       // redirecting with the view page and collected data from DB
       return response.redirect("/users/sign-in");
     } catch (error) {
-      console.log(
-        `Error occured while trying to create user please try again: ${error}`
-      );
+      request.flash('error', error);
       return response.redirect("back");
     }
   } else {

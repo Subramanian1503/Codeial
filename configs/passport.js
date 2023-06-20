@@ -9,8 +9,9 @@ passport.use(
   new localStrategy(
     {
       usernameField: "email",
+      passReqToCallback: true
     },
-    (email, password, done) => {
+    (request, email, password, done) => {
       // Finding the user whether present in DB using email sent as input
       User.findOne({ email: email })
         .then((user) => {
@@ -20,13 +21,13 @@ passport.use(
             return done(null, user);
           } else {
             // If not then done allow
-            console.log(`Login not successful`);
+            request.flash('error', "Not Authorized user");
             return done(null, false);
           }
         })
         .catch((error) => {
           if (error) {
-            console.log("Error while finding user -> passport");
+            request.flash('error', error);
             return done(error);
           }
         });

@@ -8,6 +8,7 @@ module.exports.home = async function (request, response) {
   try {
     //Getting all the posts from DB
     const posts = await Post.find({})
+      .sort("-createdAt")
       .populate("user")
       .populate({
         path: "comments",
@@ -27,9 +28,7 @@ module.exports.home = async function (request, response) {
       all_users: users,
     });
   } catch (error) {
-    console.log(
-      `Error while trying to fetching home page data from DB : ${error}`
-    );
+    request.flash('error', error);
     return response.redirect("back");
   }
 };

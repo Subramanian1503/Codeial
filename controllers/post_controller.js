@@ -29,6 +29,16 @@ module.exports.deletePost = async function (request, response) {
       });
       console.log("Comments deleted");
 
+      // If the request is from ajax then return status code and deleted post
+      if (request.xhr) {
+        return response.status(200).json({
+          data: {
+            post_id: postId,
+          },
+          message: `Post with id: ${postId} deleted successfully`,
+        });
+      }
+
       // Redirecting to the same page with updated data
       return response.redirect("back");
     } else {
@@ -61,12 +71,23 @@ module.exports.createPost = function (request, response) {
   Post.create(post)
     .then((post) => {
       console.log("Post created successfully");
+
+      if (request.xhr) {
+        return response.status(200).json({
+          data: {
+            post: post,
+          },
+          message: "Post created successfully",
+        });
+      }
+
+      // Flasing the notification that post created successfully
+      request.flash("success", "Post created successfully");
+
       return response.redirect("back");
     })
     .catch((error) => {
-      console.log(
-        `Error occured while trying to create user please try again: ${error}`
-      );
+      request.flash("error", error);
       return response.redirect("back");
     });
 };

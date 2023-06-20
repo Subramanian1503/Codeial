@@ -22,6 +22,10 @@ const MongoStore = require('connect-mongo')
 // Requiring the SASS node module to use SASS CSS format to make life easy
 const sassMiddleWare = require('node-sass-middleware');
 
+// Requiring connect-flash to use it to have flash messages feature
+const flash = require('connect-flash');
+const customMware = require('./configs/middleware');
+
 // Declaring a port on which the server need to listen
 const port = 8080;
 
@@ -74,6 +78,10 @@ app.use(passport.session());
 
 // Use middleware to set authentication user information in the response so that views can use that
 app.use(passport.setAuthenticatedUser);
+
+// Extracting the utilities provided by flash by using a middleware
+app.use(flash());
+app.use(customMware.setFlash);
 
 // Initialise the custom router class
 app.use("/", require("./routes"));
