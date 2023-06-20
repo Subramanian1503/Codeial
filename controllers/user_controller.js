@@ -12,7 +12,7 @@ module.exports.update = async function (request, response) {
     const updatedUser = await User.findByIdAndUpdate(userId, request.body);
     console.log(`Updated user`);
   } catch (error) {
-    request.flash('error', error);
+    request.flash("error", error);
   }
 
   return response.redirect("back");
@@ -34,7 +34,7 @@ module.exports.userProfile = async function (request, response) {
       requested_user: requestedUser,
     });
   } catch (error) {
-    request.flash('error', error);
+    request.flash("error", error);
   }
 };
 
@@ -70,7 +70,7 @@ module.exports.createSession = function (request, response) {
 // Logging out from the session
 module.exports.destroySession = (request, response) => {
   request.logout((error) => {
-    request.flash('error', error);
+    request.flash("error", error);
   });
 
   // Adding the success message to the request to show as a flash message
@@ -91,13 +91,18 @@ module.exports.createUser = async function (request, response) {
       const createdUser = await User.create(request.body);
       console.log("User created successfully");
 
+      // Adding the success message to the request to show as a flash message
+      request.flash("success", "User created successfully");
+
       // redirecting with the view page and collected data from DB
       return response.redirect("/users/sign-in");
     } catch (error) {
-      request.flash('error', error);
+      request.flash("error", error);
       return response.redirect("back");
     }
   } else {
+    // Adding the success message to the request to show as a flash message
+    request.flash("error", `${validationResponse}`);
     console.log(
       `Error occured while trying to signUp user with error message: ${validationResponse}`
     );

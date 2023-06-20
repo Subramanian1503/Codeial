@@ -14,7 +14,6 @@
         url: "posts/create",
         data: new_post_form.serialize(),
         success: (data) => {
-          console.log(data);
           // Creating the DOM of newly created post
           let createPostDOM = listCreatedPosts(data.data.post);
 
