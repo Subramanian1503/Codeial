@@ -1,25 +1,36 @@
 <link rel="stylesheet" href="/css/user_profile.css" />
 <h1>Codeial / Profile Page</h1>
 
-<% if(user.id == requested_user.id) {%>
-<form action="users/update/<%= requested_user.id %>" method="post">
+<% if(user.id == requested_user.id) { %>
+<form
+  action="users/update/<%= requested_user.id %>"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <!-- User name input -->
   <input
     type="text"
     placeholder="Add your name"
     name="name"
-    value=<%= requested_user.name%>
+    value="<% requested_user.name %>"
     required
   />
+
+  <!-- Email input -->
   <input
     type="text"
     placeholder="Add your emailId"
     name="email"
-    value=<%= requested_user.email%>
+    value="<% requested_user.email %>"
     required
   />
+
+  <!-- Avatar input -->
+  <input type="file" name="avatar" placeholder="Add your profile picture" />
+
   <input type="submit" value="Update" />
 </form>
-<% } else {%>
+<% } else { %>
 
 <p><%= requested_user.name %></p>
 <p><%= requested_user.email %></p>

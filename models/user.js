@@ -1,7 +1,16 @@
-// 01 => Requiring mongoose to create a model
+// Requiring mongoose to create a model
 const mongoose = require("mongoose");
 
-// 02 => Defining the schema from mongoose and define its attributes
+// Adding multer as a library to maintain images as avatar for user
+const multer = require("multer");
+
+// Adding path to define path fr images to store
+const path = require("path");
+
+// Defining the folder to store avatar
+const AVATAR_PATH = path.join("/upload/users/avatar");
+
+// Defining the schema from mongoose and define its attributes
 const userSchema = new mongoose.Schema(
   {
     email: {
@@ -17,11 +26,25 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    avatar: {
+      type: String,
+    },
   },
   {
     timeStamp: true,
   }
 );
+
+// Defining the required properties to store a uploaded file
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "..", AVATAR_PATH));
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix);
+  },
+});
 
 // 03 => Converting a schema into a model by provide the collection name for the defined schema
 const User = mongoose.model("User", userSchema);
