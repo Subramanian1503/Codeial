@@ -95,6 +95,9 @@ app.use(sassMiddleWare({
   prefix: '/css'
 }))
 
+// Setting a middleware to redirect to the local upload folder for image search
+app.use("/upload", express.static(__dirname + "/upload"));
+
 // Express applicaiton listening the port
 app.listen(port, function (error) {
   if (error) {

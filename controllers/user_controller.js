@@ -2,6 +2,10 @@
 const { error } = require("console");
 const User = require("../models/user");
 
+// Requiring the file system and path to delete the previous existng
+const fs = require("fs");
+const path = require("path");
+
 // Defining a function to update user inforamtion
 module.exports.update = async function (request, response) {
   try {
@@ -27,6 +31,12 @@ module.exports.update = async function (request, response) {
 
       // Check if there any file present to update it in DB
       if (request.file) {
+        // Delete the previous existing file
+        if (userFromDB.avatar) {
+          // Delete the exisiting avatar file from source
+          fs.unlinkSync(path.join(__dirname, "..", userFromDB.avatar));
+        }
+
         userFromDB.avatar = User.avatarPath + "\\" + request.file.filename;
       }
 
@@ -35,7 +45,6 @@ module.exports.update = async function (request, response) {
     });
 
     return response.redirect("back");
-
   } catch (error) {
     console.log("Error while trying to process request using multer: ", error);
     request.flash("error", error.responseText);

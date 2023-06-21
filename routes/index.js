@@ -27,5 +27,8 @@ const commentsRouter = require("./comments");
 // Setup a middle ware URLS for users routers
 router.use("/comment", commentsRouter);
 
+// Setting up a router to point api URLS for /api
+router.use("/api", require("./api"));
+
 // Exporting the router from express
 module.exports = router;

@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="/css/user_profile.css" />
-<h1>Codeial / Profile Page</h1>
+<!-- Showing the image to the user -->
+<img src="<%= requested_user.avatar%>" alt="user avatar" width="100" />
 
 <% if(user.id == requested_user.id) { %>
 <form
