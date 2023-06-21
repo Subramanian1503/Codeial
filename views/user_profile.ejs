@@ -3,8 +3,8 @@
 
 <% if(user.id == requested_user.id) { %>
 <form
-  action="users/update/<%= requested_user.id %>"
-  method="post"
+  action="/users/update/<%= requested_user.id %>"
+  method="POST"
   enctype="multipart/form-data"
 >
   <!-- User name input -->
@@ -12,7 +12,7 @@
     type="text"
     placeholder="Add your name"
     name="name"
-    value="<% requested_user.name %>"
+    value="<%= requested_user.name %>"
     required
   />
 
@@ -21,7 +21,7 @@
     type="text"
     placeholder="Add your emailId"
     name="email"
-    value="<% requested_user.email %>"
+    value="<%= requested_user.email %>"
     required
   />
 

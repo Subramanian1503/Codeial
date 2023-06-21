@@ -8,11 +8,37 @@ module.exports.update = async function (request, response) {
     // Getting the userId
     const userId = request.params.id;
 
-    // Finding the user and updating the user with request body
-    const updatedUser = await User.findByIdAndUpdate(userId, request.body);
-    console.log(`Updated user`);
+    // Finding the user
+    const userFromDB = await User.findById(userId);
+
+    // Process the request using multer as the request is not readable due to multipart encryption
+    User.uploadedAvatar(request, response, (error) => {
+      // If error then log that and do nothing
+      if (error) {
+        console.log(
+          `Error while trying to process request using multer: 
+          ${error}`
+        );
+      }
+
+      // If not then get the values from request.body
+      userFromDB.name = request.body.name;
+      userFromDB.email = request.body.email;
+
+      // Check if there any file present to update it in DB
+      if (request.file) {
+        userFromDB.avatar = User.avatarPath + "\\" + request.file.filename;
+      }
+
+      // Save the user
+      userFromDB.save();
+    });
+
+    return response.redirect("back");
+
   } catch (error) {
-    request.flash("error", error);
+    console.log("Error while trying to process request using multer: ", error);
+    request.flash("error", error.responseText);
   }
 
   return response.redirect("back");
@@ -30,11 +56,11 @@ module.exports.userProfile = async function (request, response) {
     // Redircting the view page with collected data
     return response.render("user_profile", {
       title: "User profile",
-      pageHeading: "Viewing user profile page",
       requested_user: requestedUser,
     });
   } catch (error) {
-    request.flash("error", error);
+    console.log(`Error occured while tryint to find user: ${error}`);
+    request.flash("error", error.responseText);
   }
 };
 
@@ -89,7 +115,6 @@ module.exports.createUser = async function (request, response) {
     try {
       // If request is valid then create a user
       const createdUser = await User.create(request.body);
-      console.log("User created successfully");
 
       // Adding the success message to the request to show as a flash message
       request.flash("success", "User created successfully");
@@ -129,7 +154,6 @@ function validateCreateUserRequest(request) {
       errorMessage = `Error occured while trying to fetch user from DB: ${error}`;
     });
   if (errorMessage) {
-    console.log(errorMessage);
     return errorMessage;
   }
 

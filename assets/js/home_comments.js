@@ -73,7 +73,6 @@
     
           // Extracting the required informaton from response
           const deletedCommentId = data.data.comment_id;
-          console.log(`${deletedCommentId}`);
 
           // Removing the Deleted comment DOM from current DOM object
           $(`#comment-${deletedCommentId}`).remove();
