@@ -29,19 +29,28 @@ module.exports.delete = async (request, response) => {
     // Find the post by its identifier
     const post = await Post.findById(postId);
 
-    // If available, Delete the post
-    await Post.findByIdAndRemove(postId);
+    console.log(`${post.user}`);
 
-    // Delete the comments of that post as well
-    await Comment.deleteMany({
-      post: postId,
-    });
+    console.log(`${request.user}`);
+    if (post.user == request.user.id) {
+      // If available, Delete the post
+      await Post.findByIdAndRemove(postId);
 
-    // return status code and delete successfull message
-    return response.status(200).json({
-      message: `Post with id: ${postId} deleted successfully`,
-    });
+      // Delete the comments of that post as well
+      await Comment.deleteMany({
+        post: postId,
+      });
 
+      // return status code and delete successfull message
+      return response.status(200).json({
+        message: `Post with id: ${postId} deleted successfully`,
+      });
+    } else {
+      // return 422 status code
+      return response.status(422).json({
+        message: "You are not authorized to delete this post",
+      });
+    }
   } catch (error) {
     console.log(`Error while trying to delete comments :${error}`);
     return response.status(500).json({

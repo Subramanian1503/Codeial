@@ -16,6 +16,10 @@ const passport = require('passport');
 // Requiring passport local strategy config to say how to handle authentication
 const passportLocal = require('./configs/passport');
 
+const passportJWT = require('./configs/passport-jwt-strategy');
+
+const passportGoogle = require('./configs/passport-google');
+
 // Requiring connect-mongo to store the encrypted session cookie content into DB so that users will not log out whenever server restart happends
 const MongoStore = require('connect-mongo')
 
