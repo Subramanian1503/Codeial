@@ -3,6 +3,8 @@ const Comment = require("../models/comment");
 
 const Post = require("../models/post");
 
+const commentMailer = require("../mailer/comment_mailer");
+
 // Deleting a comment and remvoving it from Posts
 module.exports.deleteComment = async function (request, response) {
   try {
@@ -12,6 +14,7 @@ module.exports.deleteComment = async function (request, response) {
 
     // Find the comment
     const comment = await Comment.findById(commentId);
+    console.log(`${comment}`);
     if (request.user.id == comment.user) {
       // Getting the post identifier to remove comments
       const postId = comment.post;
@@ -27,6 +30,8 @@ module.exports.deleteComment = async function (request, response) {
 
       // Find the index to remove from post comments
       console.log("Finding the index of comment");
+
+      console.log(`${post}`);
       const commentIndex = post.comments.indexOf(commentId);
 
       // Remove the index
@@ -59,44 +64,54 @@ module.exports.deleteComment = async function (request, response) {
 };
 
 // Defining the action to create a comment
-module.exports.create = (request, response) => {
-  // Getting the post of the comment
-  const postId = request.body.post;
-  console.log(postId);
+module.exports.create = async (request, response) => {
+  try {
+    // Getting required information from request
+    const postId = request.body.post;
+    const commentContent = request.body.content;
+    const user = request.user;
 
-  Post.findById(postId)
-    .then((post) => {
-      // Create comment for the post
-      Comment.create({
-        content: request.body.content,
-        user: request.user,
-        post: postId,
-      })
-        .then((comment) => {
-          // Adding the comment id to post
-          post.comments.push(comment);
-          post.save();
+    // Finding the post by its identifier
+    const post = await Post.findById(postId);
 
-          // Sending response if the request is from AJAX API call
-          if (request.xhr) {
-            return response.status(200).json({
-              data: {
-                comment: comment,
-              },
-              message: "Comment Created successfully",
-            });
-          }
-
-          // Flasing the notification that post created successfully
-          request.flash("success", "Comment created successfully");
-
-          response.redirect("/");
-        })
-        .catch((error) => {
-          request.flash("error", error);
-        });
-    })
-    .catch((error) => {
-      request.flash("error", error);
+    // Create comment with its content and postId
+    let createdComment = await Comment.create({
+      content: commentContent,
+      user: user,
+      post: postId,
     });
+
+    // Add the created comment in the post
+    post.comments.push(createdComment);
+
+    // Save the post with the changes
+    post.save();
+
+    // Populate the comment with the user information
+    createdComment = await createdComment
+      .populate("user", "name email");
+
+    // Call comment mailer to generate mail
+    commentMailer.newCommentMailer(createdComment);
+
+    // If AJAX request then send response
+    if (request.xhr) {
+      return response.status(200).json({
+        data: {
+          comment: createdComment,
+        },
+        message: "Comment Created successfully",
+      });
+    }
+
+    // Have flash message to create comment
+    request.flash("success", "Comment created successfully");
+
+    // Redirect to the home page
+    response.redirect("/");
+  } catch (error) {
+    request.flash("error", error);
+    console.log(`Error while trying to create comment: ${error}`);
+    return response.redirect("/");
+  }
 };
