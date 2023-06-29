@@ -3,14 +3,20 @@ const nodeMailer = require("../configs/nodemailer");
 
 // Define a function to send the mail with the comment information
 exports.newCommentMailer = (comment) => {
-  console.log("Inside the comment mailer");
+  // Render the html template content from the file and make it as string
+  const htmlString = nodeMailer.renderHtml(
+    {
+      comment: comment,
+    },
+    "/comments/new_comment.ejs"
+  );
 
   nodeMailer.transporter.sendMail(
     {
       from: "roopan1503@gmail.com",
       to: comment.user.email,
       subject: "Hey my first mail sent successfully",
-      html: "<h1>New Comment Got Triggered</h1>",
+      html: htmlString,
     },
     (error, info) => {
       if (error) {

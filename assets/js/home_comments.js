@@ -18,6 +18,7 @@
         data: createCommentForm.serialize(),
         success: (data) => {
           // Convert the API response as DOM object
+          console.log(`${data}`);
           const commentResponse = data.data.comment;
           let createdCommentDOM = getCreatedCommentDOM(commentResponse);
 
@@ -51,6 +52,12 @@
     <br>
     
     <small> <b>Author: </b> ${comment.user.name}</small>
+
+    <small>
+    <a class="toggle-like-button" data-likes="0" href="/like/toggle?id=<%= comment._id %>&type=Comment" >
+       0 Likes
+    </a>
+  </small>
     </li>
     `);
   };

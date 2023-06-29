@@ -7,7 +7,7 @@ const Post = require("../models/post");
 module.exports.home = async function (request, response) {
   try {
     //Getting all the posts from DB
-    const posts = await Post.find({})
+    let posts = await Post.find({})
       .sort("-createdAt")
       .populate("user")
       .populate({
@@ -15,7 +15,12 @@ module.exports.home = async function (request, response) {
         populate: {
           path: "user",
         },
-      });
+        populate: {
+          path: "likes",
+        },
+      })
+      .populate("comments")
+      .populate("likes");
 
     // Getting all the users from DB
     const users = await User.find({});
@@ -28,7 +33,7 @@ module.exports.home = async function (request, response) {
       all_users: users,
     });
   } catch (error) {
-    request.flash('error', error);
+    request.flash("error", error);
     return response.redirect("back");
   }
 };

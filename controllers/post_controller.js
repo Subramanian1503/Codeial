@@ -4,6 +4,8 @@ const Post = require("../models/post");
 // Requiring the comments model to perform CRUD operation
 const Comment = require("../models/comment");
 
+const Like = require("../models/like");
+
 // Deleting a post and it comments from DB
 module.exports.deletePost = async function (request, response) {
   try {
@@ -13,21 +15,29 @@ module.exports.deletePost = async function (request, response) {
 
     // Find the post by its identifier
     const post = await Post.findById(postId);
-    console.log(`post was available in DB: ${postId}`);
 
     // If available, check if it is created by the user
     if (post.user == request.user.id) {
-      console.log(`Delete requested by authorized user`);
+      // Delete all the likes associated with this post
+      await Like.deleteMany({
+        likeable: postId,
+        onModel: "Post",
+      });
 
-      // If yes, Delete the post
-      await Post.findByIdAndRemove(postId);
-      console.log(`Post deleted`);
+      // Delete all the likes associated with the comments of this post
+      await Like.deleteMany({
+        _id: {
+          $in: post.comments,
+        },
+      });
 
       // Delete the comments of that post as well
       await Comment.deleteMany({
         post: postId,
       });
-      console.log("Comments deleted");
+
+      // If yes, Delete the post
+      await Post.findByIdAndRemove(postId);
 
       // If the request is from ajax then return status code and deleted post
       if (request.xhr) {

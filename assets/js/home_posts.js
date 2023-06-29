@@ -49,6 +49,11 @@
             <br>
             
             <small><b>Author: </b> ${post.user.name} </small>
+
+          <small>
+           <a class="toggle-like-button" data-likes="0" href="/like/toggle?id=<%= post._id %>&type=Post">0 Likes
+           </a>
+         </small>
             
             <!-- Adding comments for the post -->
             <div id="create-comment-container">

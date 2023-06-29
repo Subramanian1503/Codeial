@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    friends: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Friendship",
+      },
+    ],
     avatar: {
       type: String,
     },
@@ -47,9 +53,10 @@ const storage = multer.diskStorage({
 });
 
 // Defining the static methods in user to be used in the controller action
-userSchema.statics.uploadedAvatar = multer({storage: storage}).single('avatar');
+userSchema.statics.uploadedAvatar = multer({ storage: storage }).single(
+  "avatar"
+);
 userSchema.statics.avatarPath = AVATAR_PATH;
-
 
 // 03 => Converting a schema into a model by provide the collection name for the defined schema
 const User = mongoose.model("User", userSchema);

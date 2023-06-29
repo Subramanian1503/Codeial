@@ -23,8 +23,11 @@
     <!-- Displaying all the posts -->
     <div id="posts-list-container">
       <ul>
-        <% for (let post of posts) {%> <%- include('_posts', { post: post, })-%>
-        <%}%>
+        <% for(post of posts){ %>
+                        
+          <%- include('_posts') -%>
+              
+          <%} %>
       </ul>
     </div>
   </section>

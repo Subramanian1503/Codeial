@@ -9,7 +9,6 @@ const userController = require("../controllers/user_controller");
 
 // Initialise a variable with router object
 const router = express.Router();
-console.log("User router created successfully");
 
 // Map the URLS with the controllers
 
@@ -42,6 +41,14 @@ router.get(
   passport.authenticate("google", { failureRedirect: "/users/sign-in" }),
   userController.createSession
 );
+router.get(
+  "/auth/password_reset",
+  userController.resetPassword
+)
+router.post(
+  "/auth/verify_user",
+  userController.verifyUser
+)
 
 // Export the router to be used as a middle ware in main router class
 module.exports = router;

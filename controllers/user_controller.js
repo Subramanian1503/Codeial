@@ -168,3 +168,39 @@ function validateCreateUserRequest(request) {
 
   return "REQUEST_VALID";
 }
+
+// Method to route to the reset password page
+module.exports.resetPassword = (request, response) => {
+  // Render the reset password page
+  response.render("reset_password", {
+    title: "Forgot password page",
+    isLoggedIn: false,
+  });
+};
+
+// Method to get email from user to reset password
+module.exports.verifyUser = async (request, response) => {
+  // Get email id from the request body
+  const emailId = request.body.email;
+
+  // Find the user email from the DB
+  const user = await User.findOne({
+    email: emailId,
+  });
+
+  // If user not present then render to sign in page with flash message as Invalid email id
+  if (!user) {
+    request.flash("error", "Invalid email provided");
+    return response.redirect("/users/sign-in");
+  }
+
+  // Generate the access token using the user information
+
+  // Send email with route and access token as email content to the user
+
+  // Redirect the same page again with user informtion
+  response.render("reset_password", {
+    title: "new password page",
+    isLoggedIn: true,
+  });
+};

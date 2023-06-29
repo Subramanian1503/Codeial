@@ -3,40 +3,44 @@ const Comment = require("../models/comment");
 
 const Post = require("../models/post");
 
+const Like = require("../models/like");
+
 const commentMailer = require("../mailer/comment_mailer");
+
+const queue = require("../configs/kue");
+
+const newCommentEmailWorker = require("../worker/new_comment_email");
 
 // Deleting a comment and remvoving it from Posts
 module.exports.deleteComment = async function (request, response) {
   try {
     // Getting the comment identifier from params to delete
     const commentId = request.params.id;
-    console.log(`Requested comment to delete: ${commentId}`);
 
     // Find the comment
     const comment = await Comment.findById(commentId);
-    console.log(`${comment}`);
+
     if (request.user.id == comment.user) {
       // Getting the post identifier to remove comments
       const postId = comment.post;
-      console.log(`Requested comment of the post: ${postId} to delete`);
+
+      // Delete all the likes associated with this comment
+      await Like.deleteMany({
+        likeable: commentId,
+        onModel: "Comment",
+      });
 
       // If present, Delete the comment
       await Comment.findByIdAndRemove(commentId);
-      console.log(`Found the comment with requested commentId`);
 
       // If Delete successful, Delete the comment id from comments of post
-      console.log("Finding the post");
       const post = await Post.findById(postId);
 
       // Find the index to remove from post comments
-      console.log("Finding the index of comment");
-
-      console.log(`${post}`);
       const commentIndex = post.comments.indexOf(commentId);
 
       // Remove the index
       if (commentIndex > -1) {
-        console.log("Removing and saving the comment");
         post.comments.splice(commentIndex, 1);
         post.save();
       }
@@ -88,11 +92,21 @@ module.exports.create = async (request, response) => {
     post.save();
 
     // Populate the comment with the user information
-    createdComment = await createdComment
-      .populate("user", "name email");
+    createdComment = await createdComment.populate("user", "name email");
 
     // Call comment mailer to generate mail
-    commentMailer.newCommentMailer(createdComment);
+    // commentMailer.newCommentMailer(createdComment);
+
+    let job = queue.create("NewCommentEmail", createdComment).save((error) => {
+      if (error) {
+        console.log(
+          "Error while trying to save the data to the new comment email queue worker : ${error}"
+        );
+        return;
+      }
+
+      console.log(`Job queued successfully : ${job.id}`);
+    });
 
     // If AJAX request then send response
     if (request.xhr) {

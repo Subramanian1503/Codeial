@@ -21,7 +21,7 @@ let renderHtml = (data, relativePath) => {
 
   // Create a HTML page contains the data and the template from the relative path
   ejs.renderFile(
-    path.join(__dirname, "views/mailers", relativePath),
+    path.join(__dirname, "../", "views/mailers", relativePath),
     data,
     (error, template) => {
       if (error) {
